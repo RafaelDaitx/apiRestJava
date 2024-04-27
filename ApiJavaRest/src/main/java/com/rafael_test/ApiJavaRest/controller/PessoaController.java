@@ -1,8 +1,7 @@
 package com.rafael_test.ApiJavaRest.controller;
 
 import com.rafael_test.ApiJavaRest.model.Pessoa;
-import com.rafael_test.ApiJavaRest.service.PessoaService;
-import org.apache.coyote.Response;
+import com.rafael_test.ApiJavaRest.service.pessoa.PessoaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

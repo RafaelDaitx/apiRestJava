@@ -1,4 +1,4 @@
-package com.rafael_test.ApiJavaRest.service;
+package com.rafael_test.ApiJavaRest.service.pessoa;
 
 import com.rafael_test.ApiJavaRest.model.Pessoa;
 import com.rafael_test.ApiJavaRest.repository.PessoaRepository;
