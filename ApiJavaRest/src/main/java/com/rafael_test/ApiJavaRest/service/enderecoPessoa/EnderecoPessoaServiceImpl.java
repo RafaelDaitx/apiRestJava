@@ -4,6 +4,7 @@ import com.rafael_test.ApiJavaRest.model.Endereco;
 import com.rafael_test.ApiJavaRest.model.Pessoa;
 import com.rafael_test.ApiJavaRest.repository.EnderecoPessoaRepository;
 import com.rafael_test.ApiJavaRest.repository.PessoaRepository;
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -53,6 +54,8 @@ public class EnderecoPessoaServiceImpl implements EnderecoPessoaService {
 
     @Override
     public void deletarEnderecoPessoa(Long id) {
-        enderecoPessoaRepository.deleteById(id);
+        Optional<Endereco> enderecoOptional = enderecoPessoaRepository.findById(id);
+        Endereco endereco = enderecoOptional.orElseThrow(() -> new ResourceNotFoundException("Pessoa não encontrada com o ID: " + id));
+        enderecoPessoaRepository.delete(endereco);
     }
 }

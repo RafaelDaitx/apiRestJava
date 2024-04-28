@@ -4,6 +4,7 @@ import com.rafael_test.ApiJavaRest.model.Endereco;
 import com.rafael_test.ApiJavaRest.repository.PessoaRepository;
 import com.rafael_test.ApiJavaRest.service.enderecoPessoa.EnderecoPessoaService;
 import com.rafael_test.ApiJavaRest.service.pessoa.PessoaService;
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,11 +35,12 @@ public class EnderecoPessoaController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteEndereco(@PathVariable Long id){
-        var existeEndereco = enderecoPessoaService.buscarEndereco(id);
-        if(existeEndereco == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        else {
+        try {
             enderecoPessoaService.deletarEnderecoPessoa(id);
             return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (ResourceNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Endereço não encontrado com o ID: " + id);
         }
     }
 }

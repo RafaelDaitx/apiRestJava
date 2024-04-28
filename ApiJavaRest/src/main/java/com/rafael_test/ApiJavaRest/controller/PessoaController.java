@@ -50,6 +50,9 @@ public class PessoaController {
         } catch (ResourceNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Pessoa não encontrada com o ID: " + id);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Ocorreu um erro ao processar a solicitação");
         }
     }
 }
