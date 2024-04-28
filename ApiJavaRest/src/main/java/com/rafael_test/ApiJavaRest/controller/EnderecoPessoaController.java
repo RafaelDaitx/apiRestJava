@@ -31,4 +31,14 @@ public class EnderecoPessoaController {
     public ResponseEntity<Endereco> create(@PathVariable Long idPessoa, @RequestBody Endereco endereco){
         return ResponseEntity.status(HttpStatus.CREATED).body(enderecoPessoaService.salvarEnderecoPessoa(idPessoa, endereco));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteEndereco(@PathVariable Long id){
+        var existeEndereco = enderecoPessoaService.buscarEndereco(id);
+        if(existeEndereco == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        else {
+            enderecoPessoaService.deletarEnderecoPessoa(id);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+    }
 }

@@ -5,6 +5,7 @@ import com.rafael_test.ApiJavaRest.model.Pessoa;
 import com.rafael_test.ApiJavaRest.repository.EnderecoPessoaRepository;
 import com.rafael_test.ApiJavaRest.repository.PessoaRepository;
 import com.rafael_test.ApiJavaRest.service.pessoa.PessoaService;
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,8 +44,12 @@ public class PessoaController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id){
-
-        pessoaService.deletarPessoa(id);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        try {
+            pessoaService.deletarPessoa(id);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (ResourceNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Pessoa não encontrada com o ID: " + id);
+        }
     }
 }

@@ -9,7 +9,7 @@ public interface EnderecoPessoaService {
 
     Endereco salvarEnderecoPessoa(Long idPessoa, Endereco endereco);
 
-    Optional<Endereco> buscarEndereco(Long idPessoa);
+    Optional<Endereco> buscarEndereco(Long id);
     Optional<Pessoa> buscarEnderecoPessoa(Long idPessoa);
 
     Endereco atualizarEnderecoPessoa(Endereco endereco);
