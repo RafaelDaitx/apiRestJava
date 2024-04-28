@@ -48,8 +48,18 @@ public class EnderecoPessoaServiceImpl implements EnderecoPessoaService {
     }
 
     @Override
-    public Endereco atualizarEnderecoPessoa(Endereco endereco) {
-        return enderecoPessoaRepository.save(endereco);
+    public Endereco atualizarEnderecoPessoa(Long id,Endereco endereco) {
+        return enderecoPessoaRepository.findById(id)
+                .map(enderecoExistente -> {
+                    enderecoExistente.setLogradouro(endereco.getLogradouro());
+                    enderecoExistente.setCep(endereco.getCep());
+                    enderecoExistente.setNumero(endereco.getNumero());
+                    enderecoExistente.setCidade(endereco.getCidade());
+                    enderecoExistente.setEstado(endereco.getEstado());
+                    enderecoExistente.setEnderecoPrincipal(endereco.isEnderecoPrincipal());
+                    return enderecoPessoaRepository.save(enderecoExistente);
+                })
+                .orElseThrow(() -> new ResourceNotFoundException("Endereço não encontrado com o ID: " + id));
     }
 
     @Override

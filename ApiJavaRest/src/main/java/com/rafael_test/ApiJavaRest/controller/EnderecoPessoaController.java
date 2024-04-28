@@ -1,6 +1,7 @@
 package com.rafael_test.ApiJavaRest.controller;
 
 import com.rafael_test.ApiJavaRest.model.Endereco;
+import com.rafael_test.ApiJavaRest.model.Pessoa;
 import com.rafael_test.ApiJavaRest.repository.PessoaRepository;
 import com.rafael_test.ApiJavaRest.service.enderecoPessoa.EnderecoPessoaService;
 import com.rafael_test.ApiJavaRest.service.pessoa.PessoaService;
@@ -31,6 +32,20 @@ public class EnderecoPessoaController {
     @PostMapping("/{idPessoa}")
     public ResponseEntity<Endereco> create(@PathVariable Long idPessoa, @RequestBody Endereco endereco){
         return ResponseEntity.status(HttpStatus.CREATED).body(enderecoPessoaService.salvarEnderecoPessoa(idPessoa, endereco));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<String> update(@PathVariable Long id, @RequestBody Endereco novoEndereco) {
+        try {
+            enderecoPessoaService.atualizarEnderecoPessoa(id, novoEndereco);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (ResourceNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Endereço não encontrado com o ID: " + id);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Ocorreu um erro ao processar a solicitação");
+        }
     }
 
     @DeleteMapping("/{id}")

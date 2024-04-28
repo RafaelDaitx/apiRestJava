@@ -12,7 +12,7 @@ public interface EnderecoPessoaService {
     Optional<Endereco> buscarEndereco(Long id);
     Optional<Pessoa> buscarEnderecoPessoa(Long idPessoa);
 
-    Endereco atualizarEnderecoPessoa(Endereco endereco);
+    Endereco atualizarEnderecoPessoa(Long id, Endereco endereco);
 
     void deletarEnderecoPessoa(Long id);
 }

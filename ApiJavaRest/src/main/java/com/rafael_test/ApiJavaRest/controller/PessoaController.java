@@ -35,7 +35,7 @@ public class PessoaController {
     @PutMapping("/{id}")
     public ResponseEntity<String> update(@PathVariable Long id, @RequestBody Pessoa novaPessoa) {
         try {
-            Pessoa pessoaAtualizada = pessoaService.atualizarPessoa(id, novaPessoa);
+           pessoaService.atualizarPessoa(id, novaPessoa);
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (ResourceNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
