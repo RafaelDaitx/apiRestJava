@@ -1,14 +1,19 @@
 package com.rafael_test.ApiJavaRest.controller;
 
+import com.rafael_test.ApiJavaRest.model.Endereco;
 import com.rafael_test.ApiJavaRest.model.Pessoa;
+import com.rafael_test.ApiJavaRest.repository.EnderecoPessoaRepository;
+import com.rafael_test.ApiJavaRest.repository.PessoaRepository;
 import com.rafael_test.ApiJavaRest.service.pessoa.PessoaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/v1/pessoas")
@@ -36,7 +41,9 @@ public class PessoaController {
         return ResponseEntity.status(HttpStatus.OK).body(pessoaService.atualizarPessoa(pessoa));
     }
 
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id){
+
         pessoaService.deletarPessoa(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

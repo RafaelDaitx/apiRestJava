@@ -1,17 +1,18 @@
 package com.rafael_test.ApiJavaRest.service.enderecoPessoa;
 
-import com.rafael_test.ApiJavaRest.model.EnderecoPessoa;
+import com.rafael_test.ApiJavaRest.model.Endereco;
 import com.rafael_test.ApiJavaRest.model.Pessoa;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface EnderecoPessoaService {
 
-    EnderecoPessoa salvarEnderecoPessoa(EnderecoPessoa enderecoPessoa);
+    Endereco salvarEnderecoPessoa(Long idPessoa, Endereco endereco);
 
-    List<EnderecoPessoa> buscarEndereco(Long idPessoa);
+    Optional<Endereco> buscarEndereco(Long idPessoa);
+    Optional<Pessoa> buscarEnderecoPessoa(Long idPessoa);
 
-    EnderecoPessoa atualizarEnderecoPessoa(EnderecoPessoa enderecoPessoa);
+    Endereco atualizarEnderecoPessoa(Endereco endereco);
 
     void deletarEnderecoPessoa(Long id);
 }
