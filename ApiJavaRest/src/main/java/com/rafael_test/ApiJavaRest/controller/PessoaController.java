@@ -1,9 +1,6 @@
 package com.rafael_test.ApiJavaRest.controller;
 
-import com.rafael_test.ApiJavaRest.model.Endereco;
 import com.rafael_test.ApiJavaRest.model.Pessoa;
-import com.rafael_test.ApiJavaRest.repository.EnderecoPessoaRepository;
-import com.rafael_test.ApiJavaRest.repository.PessoaRepository;
 import com.rafael_test.ApiJavaRest.service.pessoa.PessoaService;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/v1/pessoas")
@@ -37,9 +32,18 @@ public class PessoaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(pessoaService.salvarPessoa(pessoa));
     }
 
-    @PutMapping
-    public ResponseEntity<Pessoa> update(@RequestBody Pessoa pessoa){
-        return ResponseEntity.status(HttpStatus.OK).body(pessoaService.atualizarPessoa(pessoa));
+    @PutMapping("/{id}")
+    public ResponseEntity<String> update(@PathVariable Long id, @RequestBody Pessoa novaPessoa) {
+        try {
+            Pessoa pessoaAtualizada = pessoaService.atualizarPessoa(id, novaPessoa);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (ResourceNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Pessoa não encontrada com o ID: " + id);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Ocorreu um erro ao processar a solicitação");
+        }
     }
 
     @DeleteMapping("/{id}")

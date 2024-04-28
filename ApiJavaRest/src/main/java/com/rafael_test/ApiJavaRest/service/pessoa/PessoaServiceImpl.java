@@ -38,8 +38,14 @@ public class PessoaServiceImpl implements PessoaService {
     }
 
     @Override
-    public Pessoa atualizarPessoa(Pessoa pessoa) {
-        return pessoaRepository.save(pessoa);
+    public Pessoa atualizarPessoa(Long id, Pessoa pessoa) {
+        return pessoaRepository.findById(id)
+                .map(pessoaExistente -> {
+                    pessoaExistente.setNomePessoa(pessoa.getNomePessoa());
+                    pessoaExistente.setDataNascimento(pessoa.getDataNascimento());
+                    return pessoaRepository.save(pessoaExistente);
+                })
+                .orElseThrow(() -> new ResourceNotFoundException("Pessoa não encontrada com o ID: " + id));
     }
 
     @Override

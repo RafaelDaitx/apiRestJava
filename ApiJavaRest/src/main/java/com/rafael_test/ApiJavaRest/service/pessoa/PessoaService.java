@@ -14,7 +14,7 @@ public interface PessoaService {
 
     Optional<Pessoa> buscarPeloId(Long id);
 
-    Pessoa atualizarPessoa(Pessoa pessoa);
+    Pessoa atualizarPessoa(Long id, Pessoa pessoa);
 
     void deletarPessoa(Long id);
 
