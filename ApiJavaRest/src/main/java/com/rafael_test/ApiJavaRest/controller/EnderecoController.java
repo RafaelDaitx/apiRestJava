@@ -1,9 +1,8 @@
 package com.rafael_test.ApiJavaRest.controller;
 
 import com.rafael_test.ApiJavaRest.model.Endereco;
-import com.rafael_test.ApiJavaRest.model.Pessoa;
-import com.rafael_test.ApiJavaRest.repository.PessoaRepository;
-import com.rafael_test.ApiJavaRest.service.enderecoPessoa.EnderecoPessoaService;
+import com.rafael_test.ApiJavaRest.repository.EnderecoRepository;
+import com.rafael_test.ApiJavaRest.service.endereco.EnderecoService;
 import com.rafael_test.ApiJavaRest.service.pessoa.PessoaService;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,18 +10,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/enderecoPessoa")
-public class EnderecoPessoaController {
+public class EnderecoController {
 
     @Autowired
-    private EnderecoPessoaService enderecoPessoaService;
+    private EnderecoService enderecoPessoaService;
 
     @Autowired
     private PessoaService pessoaService;
 
+    @Autowired
+    private EnderecoRepository enderecoRepository;
 
     @GetMapping("/{idPessoa}")
     public ResponseEntity<Optional<Endereco>> findByIdPessoa(@PathVariable Long idPessoa){
@@ -35,16 +37,30 @@ public class EnderecoPessoaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> update(@PathVariable Long id, @RequestBody Endereco novoEndereco) {
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Endereco novoEndereco) {
         try {
-            enderecoPessoaService.atualizarEnderecoPessoa(id, novoEndereco);
-            return ResponseEntity.status(HttpStatus.OK).build();
+            return enderecoPessoaService.buscarEndereco(id).map(
+                    buscaEndereco -> {
+                        if (novoEndereco.isEnderecoPrincipal()) {
+                            // Busca o endereço associado à mesma pessoa (idPessoa)
+                            Optional<Endereco> outrosEnderecos = enderecoPessoaService.buscarEndereco(buscaEndereco.getIdPessoa().getId());
+
+                            outrosEnderecos.ifPresent(outroEndereco -> {
+                                outroEndereco.setEnderecoPrincipal(false);
+                                enderecoPessoaService.atualizarEnderecoPessoa(outroEndereco.getId(), outroEndereco);
+                            });
+                        }
+
+                        // Atualiza o endereço principal
+                        enderecoPessoaService.atualizarEnderecoPessoa(id, novoEndereco);
+
+                        return ResponseEntity.status(HttpStatus.OK).build();
+                    }
+            ).orElseThrow(() -> new ResourceNotFoundException("Endereço não encontrado com o ID: " + id));
+
         } catch (ResourceNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Endereço não encontrado com o ID: " + id);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Ocorreu um erro ao processar a solicitação");
         }
     }
 

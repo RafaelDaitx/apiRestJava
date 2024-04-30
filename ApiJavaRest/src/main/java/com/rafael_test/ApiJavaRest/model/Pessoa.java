@@ -23,7 +23,7 @@ public class Pessoa {
     @Temporal(TemporalType.DATE)
     private Date dataNascimento;
 
-    @OneToMany(cascade =CascadeType.ALL, mappedBy = "idPessoa",  fetch = FetchType.EAGER)
+    @OneToMany(cascade =CascadeType.ALL, mappedBy = "idPessoa",fetch = FetchType.EAGER)
     @JsonBackReference
     private List<Endereco> enderecos;
 

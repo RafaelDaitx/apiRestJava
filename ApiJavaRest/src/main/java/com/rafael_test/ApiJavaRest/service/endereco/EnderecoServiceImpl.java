@@ -1,8 +1,8 @@
-package com.rafael_test.ApiJavaRest.service.enderecoPessoa;
+package com.rafael_test.ApiJavaRest.service.endereco;
 
 import com.rafael_test.ApiJavaRest.model.Endereco;
 import com.rafael_test.ApiJavaRest.model.Pessoa;
-import com.rafael_test.ApiJavaRest.repository.EnderecoPessoaRepository;
+import com.rafael_test.ApiJavaRest.repository.EnderecoRepository;
 import com.rafael_test.ApiJavaRest.repository.PessoaRepository;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +13,10 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.Optional;
 
 @Service
-public class EnderecoPessoaServiceImpl implements EnderecoPessoaService {
+public class EnderecoServiceImpl implements EnderecoService {
 
     @Autowired
-    private EnderecoPessoaRepository enderecoPessoaRepository;
+    private EnderecoRepository enderecoRepository;
 
     @Autowired
     private PessoaRepository pessoaRepository;
@@ -34,12 +34,17 @@ public class EnderecoPessoaServiceImpl implements EnderecoPessoaService {
                 endereco.getEstado(),
                 endereco.isEnderecoPrincipal()
         );
-        return enderecoPessoaRepository.save(enderecoPessoa);
+        return enderecoRepository.save(enderecoPessoa);
     }
 
     @Override
-    public Optional<Endereco> buscarEndereco(Long idPessoa) {
-        return enderecoPessoaRepository.findById(idPessoa);
+    public Optional<Endereco> buscarEndereco(Long id) {
+        return enderecoRepository.findById(id);
+    }
+
+    @Override
+    public Optional<Endereco> buscarTodosEnderecosPessoa(Long idPessoa) {
+        return enderecoRepository.findById(idPessoa);
     }
 
     @Override
@@ -49,7 +54,7 @@ public class EnderecoPessoaServiceImpl implements EnderecoPessoaService {
 
     @Override
     public Endereco atualizarEnderecoPessoa(Long id,Endereco endereco) {
-        return enderecoPessoaRepository.findById(id)
+        return enderecoRepository.findById(id)
                 .map(enderecoExistente -> {
                     enderecoExistente.setLogradouro(endereco.getLogradouro());
                     enderecoExistente.setCep(endereco.getCep());
@@ -57,15 +62,15 @@ public class EnderecoPessoaServiceImpl implements EnderecoPessoaService {
                     enderecoExistente.setCidade(endereco.getCidade());
                     enderecoExistente.setEstado(endereco.getEstado());
                     enderecoExistente.setEnderecoPrincipal(endereco.isEnderecoPrincipal());
-                    return enderecoPessoaRepository.save(enderecoExistente);
+                    return enderecoRepository.save(enderecoExistente);
                 })
                 .orElseThrow(() -> new ResourceNotFoundException("Endereço não encontrado com o ID: " + id));
     }
 
     @Override
     public void deletarEnderecoPessoa(Long id) {
-        Optional<Endereco> enderecoOptional = enderecoPessoaRepository.findById(id);
+        Optional<Endereco> enderecoOptional = enderecoRepository.findById(id);
         Endereco endereco = enderecoOptional.orElseThrow(() -> new ResourceNotFoundException("Pessoa não encontrada com o ID: " + id));
-        enderecoPessoaRepository.delete(endereco);
+        enderecoRepository.delete(endereco);
     }
 }

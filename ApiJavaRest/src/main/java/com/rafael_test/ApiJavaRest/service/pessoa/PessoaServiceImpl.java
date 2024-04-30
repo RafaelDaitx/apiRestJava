@@ -1,12 +1,10 @@
 package com.rafael_test.ApiJavaRest.service.pessoa;
 
 import com.rafael_test.ApiJavaRest.model.Pessoa;
-import com.rafael_test.ApiJavaRest.repository.EnderecoPessoaRepository;
+import com.rafael_test.ApiJavaRest.repository.EnderecoRepository;
 import com.rafael_test.ApiJavaRest.repository.PessoaRepository;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,7 +18,7 @@ public class PessoaServiceImpl implements PessoaService {
     private PessoaRepository pessoaRepository;
 
     @Autowired
-    private EnderecoPessoaRepository enderecoPessoaRepository;
+    private EnderecoRepository enderecoRepository;
 
     @Override
     public Pessoa salvarPessoa(Pessoa pessoa) {
